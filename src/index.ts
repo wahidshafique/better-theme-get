@@ -6,27 +6,18 @@ const camelCase = (input: string) =>
 
 // a getter to access theme items
 // you can use it to get 1 value > get('fontSizes.3'); or both css prop:val > get('font-size', 3);
-
-const get = (themeKey: string, optThemeValue?: number, optThemeObject?: {}) => (
-  props: any
-) => {
+const get = (
+  themeKey: string,
+  optThemeValue?: string | number | Array<string | number> | null
+) => (props: { theme: {} }) => {
   // nominal case for when you pass both args
-  if (themeKey && optThemeValue !== undefined) {
+  if (themeKey && optThemeValue !== null && optThemeValue !== undefined) {
     const normalizedThemeKey = camelCase(themeKey);
     return css({
       [normalizedThemeKey]: optThemeValue,
     });
   }
-  // otherwise act on single arg as usual
-  let modProps = props || {};
-  // if there is a missing theme for some reason, default to the optional theme argument
-  if (!modProps?.theme && optThemeObject) {
-    modProps = {
-      ...modProps,
-      theme: optThemeObject,
-    };
-  }
-  return themeGet(themeKey)(modProps);
+  return themeGet(themeKey)(props);
 };
 
 export default get;

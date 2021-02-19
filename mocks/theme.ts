@@ -1,3 +1,6 @@
+export const colors = {
+  iconGrey: "#98A2B2",
+};
 export const space = [
   "0rem", // 0px
   "0.5rem", // 8px
@@ -61,11 +64,17 @@ export const zIndices: { [k: string]: any } = {
 zIndices.modalOverlay = zIndices.skyscraper;
 zIndices.modal = zIndices.satellite;
 
-export default {
+export const breakpoints = ["40em", "52em", "64em"];
+
+const theme: { [key: string]: any } = {
   space,
   sizes,
   fontSizes,
   fontWeights,
   radii,
   zIndices,
+  colors,
+  breakpoints,
 };
+
+export default theme;

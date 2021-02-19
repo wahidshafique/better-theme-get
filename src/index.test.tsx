@@ -12,8 +12,15 @@ import theme, {
 import get from "./index";
 import { ThemeProvider } from "styled-components";
 
-const renderWithTheme = (ui: React.ReactElement) =>
-  render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);
+// TODO: this is just a hack to make ts not complain
+interface RenderReturn {
+  container: HTMLElement & { firstChild: HTMLElement };
+}
+
+const renderWithTheme = (ui: React.ReactElement): RenderReturn =>
+  (render(
+    <ThemeProvider theme={theme}>{ui}</ThemeProvider>
+  ) as unknown) as RenderReturn;
 
 // SINGLE ARG CASES
 const Spacer = styled.div`
@@ -140,6 +147,34 @@ test("it works with aliased dual arguments for: radii ", () => {
 
 // independent uses
 test("it works outside of theme for: colors.iconGrey", () => {
-  const themeColor = get("colors.iconGrey")();
+  const themeColor = get("colors.iconGrey")({
+    theme,
+  });
   expect(themeColor).toEqual("#98A2B2");
+});
+
+// using media query array
+const ButtonMedia = styled.button`
+  ${get("font-size", [0, 2, 4])};
+`;
+test("it works with dual arguments that uses a media query array ", () => {
+  const { container } = renderWithTheme(<ButtonMedia />);
+  expect(container.firstChild).toHaveStyleRule(
+    "font-size",
+    `${fontSizes[0]}px`
+  );
+  expect(container.firstChild).toHaveStyleRule(
+    "font-size",
+    `${fontSizes[2]}px`,
+    {
+      media: "screen and (min-width: 40em)",
+    }
+  );
+  expect(container.firstChild).toHaveStyleRule(
+    "font-size",
+    `${fontSizes[4]}px`,
+    {
+      media: "screen and (min-width: 52em)",
+    }
+  );
 });
