@@ -3,11 +3,19 @@
   "version": "1.0.0",
   "main": "index.js",
   "repository": "git@github.com:wahidshafique/better-theme-get.git",
-  "author": "wahidshafique <wahid.shafique@gubagoo.com>",
+  "author": "wahidshafique <wahidshafique42@gmail.com>",
   "license": "MIT",
+  "keywords": [
+    "Styled System",
+    "Theme-get",
+    "Theming",
+    "Getter"
+  ],
   "scripts": {
     "test": "jest",
-    "build": "rm -rf lib && tsc -p tsconfig-build.json"
+    "build": "rm -rf lib && tsc -p tsconfig-build.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test"
   },
   "files": [
     "lib/**/*"
